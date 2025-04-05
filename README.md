@@ -21,8 +21,8 @@ Além do CRUD básico, o projeto também:
 
 - **Alice Salim Khouri Antunes** – Entidade Série + Visão
 - **Guilherme Henrique da Silva Teodoro** – Entidade Episódio + Visão
-- **Pessoa 3** – Controle de Séries + Relacionamento
-- **Pessoa 4** – Controle de Episódios + Integração geral e menus
+- **Daniel Victor Rocha Costa** – Controle de Séries + Relacionamento
+- **Arthur Carvalho Rodrigues** – Controle de Episódios + Integração geral e menus
 
 ---
 
