@@ -19,8 +19,8 @@ Além do CRUD básico, o projeto também:
 
 ## 👥 Participantes
 
-- **Pessoa 1** – Entidade Série + Visão
-- **Pessoa 2** – Entidade Episódio + Visão
+- **Alice Salim Khouri Antunes** – Entidade Série + Visão
+- **Guilherme Henrique da Silva Teodoro** – Entidade Episódio + Visão
 - **Pessoa 3** – Controle de Séries + Relacionamento
 - **Pessoa 4** – Controle de Episódios + Integração geral e menus
 
@@ -92,7 +92,7 @@ Conseguimos cumprir todos os requisitos propostos, respeitando a organização e
 
 ## 🔗 Repositório
 
-[🔗](https://github.com/alicesalim/tp1_aeds3.git)  
+[🔗 https://github.com/alicesalim/tp1_aeds3.git](https://github.com/alicesalim/tp1_aeds3.git)  
 
 ---
 
