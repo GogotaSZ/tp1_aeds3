@@ -5,31 +5,31 @@ import modelo.Serie;
 
 public class VisaoSeries {
 
-    private Scanner scanner;
-
-    public VisaoSeries() {
-        scanner = new Scanner(System.in);
-    }
-
-    public Serie leSerie() {
-        System.out.print("Nome da série: ");
-        String nome = scanner.nextLine();
-
+    public Serie leSerie(Scanner sc) {
+        System.out.println("----- Cadastro de nova série -----");
+        System.out.print("Nome: ");
+        String nome = sc.nextLine();
+        
         System.out.print("Ano de lançamento: ");
-        int ano = Integer.parseInt(scanner.nextLine());
-
+        int ano = Integer.parseInt(sc.nextLine());
+    
         System.out.print("Sinopse: ");
-        String sinopse = scanner.nextLine();
-
-        System.out.print("Streaming: ");
-        String streaming = scanner.nextLine();
-
-        return new Serie(nome, ano, sinopse, streaming);
+        String sinopse = sc.nextLine();
+    
+        System.out.print("Plataforma de streaming: ");
+        String streaming = sc.nextLine();
+    
+        Serie s = new Serie();
+        s.setNome(nome);
+        s.setAnoLancamento(ano);
+        s.setSinopse(sinopse);
+        s.setStreaming(streaming);
+    
+        return s;
     }
+    
 
     public void mostraSerie(Serie s) {
-        System.out.println("\n===== Detalhes da Série =====");
-        System.out.println(s);
-        System.out.println("==============================");
+        System.out.println(s.toString());
     }
 }
