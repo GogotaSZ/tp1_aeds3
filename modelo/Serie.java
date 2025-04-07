@@ -1,6 +1,7 @@
 package modelo;
 
 import java.io.*;
+import util.Registro;
 
 public class Serie implements Registro {
     private int id;
