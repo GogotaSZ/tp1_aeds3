@@ -1,3 +1,4 @@
+package util;
 import util.RegistroArvoreBMais;
 
 import java.io.*;

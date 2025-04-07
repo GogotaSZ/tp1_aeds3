@@ -1,3 +1,5 @@
+package modelo;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -62,6 +64,8 @@ public class Episodio implements Registro {
     public String getSinopse() {
         return sinopse;
     }
+
+    public int getTemporada() { return temporada;}
 
     // Serialização
     public byte[] toByteArray() throws IOException {
