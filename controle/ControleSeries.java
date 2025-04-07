@@ -13,7 +13,7 @@ import modelo.Episodio;
 import visao.VisaoSeries;
 import visao.VisaoEpisodios;
 import util.Arquivo;
-import aed3.ArvoreBMais;
+import util.ArvoreBMais;
 import java.util.ArrayList;
 import java.util.Scanner;
 import util.ParSerieEpisodio;
@@ -39,7 +39,9 @@ public class ControleSeries {
     public void menu() {
         int opc;
         do {
-            System.out.println("\n--- MENU SÉRIES ---");
+            System.out.println("\nPUCFlix 1.0")
+            System.out.println("-----------");
+            System.out.println("> Início > Séries")
             System.out.println("1. Inserir série");
             System.out.println("2. Buscar série");
             System.out.println("3. Atualizar série");
