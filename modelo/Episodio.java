@@ -2,7 +2,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import aed3.Registro;
+import util.Registro;
 
 public class Episodio implements Registro {
 
