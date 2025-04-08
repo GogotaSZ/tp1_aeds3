@@ -1,22 +1,13 @@
-// Series Controller
-/* 
- * - Insert,Search,Update and Delete Menu
- * - Calls methods from VisaoSeries
- * - Verifies if series to be deleted have episodes
- * - Uses B+ tree indexes to manage series and episodes. 
- */
-
 package controle;
 
 import modelo.Serie;
 import modelo.Episodio;
+import util.*;
 import visao.VisaoSeries;
 import visao.VisaoEpisodios;
-import util.Arquivo;
-import util.ArvoreBMais;
+
 import java.util.ArrayList;
 import java.util.Scanner;
-import util.ParSerieEpisodio;
 
 public class ControleSeries {
 
@@ -30,7 +21,11 @@ public class ControleSeries {
     public ControleSeries() throws Exception {
         arqSeries = new Arquivo<>("Series", Serie.class.getConstructor());
         arqEpisodios = new Arquivo<>("Episodios", Episodio.class.getConstructor());
-        indiceArvore = new ArvoreBMais<>(ParSerieEpisodio.class.getConstructor(), 4, "serie_episodio.ind");
+        indiceArvore = new ArvoreBMais<>(
+                ParSerieEpisodio.class.getConstructor(),
+                4,
+                "dados/Episodios/serie_episodio.ind"
+        );
         visaoS = new VisaoSeries();
         visaoE = new VisaoEpisodios();
         sc = new Scanner(System.in);
@@ -39,9 +34,9 @@ public class ControleSeries {
     public void menu() {
         int opc;
         do {
-            System.out.println("\nPUCFlix 1.0")
+            System.out.println("\nPUCFlix 1.0");
             System.out.println("-----------");
-            System.out.println("> Início > Séries")
+            System.out.println("> Início > Séries");
             System.out.println("1. Inserir série");
             System.out.println("2. Buscar série");
             System.out.println("3. Atualizar série");
@@ -124,7 +119,15 @@ public class ControleSeries {
             return;
         }
 
-        ArrayList<ParSerieEpisodio> pares = indiceArvore.read(new ParSerieEpisodio(idSerie, -1));
+        // Corrigido: leitura de todos os pares e filtragem manual por idSerie
+        ArrayList<ParSerieEpisodio> todos = indiceArvore.readAll();
+        ArrayList<ParSerieEpisodio> pares = new ArrayList<>();
+        for (ParSerieEpisodio par : todos) {
+            if (par.getIdSerie() == idSerie) {
+                pares.add(par);
+            }
+        }
+
         ArrayList<Episodio> episodios = new ArrayList<>();
         for (ParSerieEpisodio par : pares) {
             Episodio ep = arqEpisodios.read(par.getIdEpisodio());
