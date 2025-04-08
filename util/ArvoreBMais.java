@@ -841,5 +841,39 @@ public class ArvoreBMais<T extends RegistroArvoreBMais<T>> {
             print1(pa.filhos.get(i));
         }
     }
+    public ArrayList<T> readAll() throws Exception {
+        ArrayList<T> lista = new ArrayList<>();
+
+        // Lê a raiz
+        arquivo.seek(0);
+        long pagina = arquivo.readLong();
+        if (pagina == -1) return lista;
+
+        // Desce até a primeira folha
+        Pagina pa;
+        byte[] buffer;
+        do {
+            arquivo.seek(pagina);
+            pa = new Pagina(construtor, ordem);
+            buffer = new byte[pa.TAMANHO_PAGINA];
+            arquivo.read(buffer);
+            pa.fromByteArray(buffer);
+            if (pa.filhos.get(0) != -1)
+                pagina = pa.filhos.get(0);
+        } while (pa.filhos.get(0) != -1);
+
+        // Percorre as folhas encadeadas
+        while (pagina != -1) {
+            arquivo.seek(pagina);
+            pa = new Pagina(construtor, ordem);
+            buffer = new byte[pa.TAMANHO_PAGINA];
+            arquivo.read(buffer);
+            pa.fromByteArray(buffer);
+            lista.addAll(pa.elementos);
+            pagina = pa.proxima;
+        }
+
+        return lista;
+    }
 
 }
