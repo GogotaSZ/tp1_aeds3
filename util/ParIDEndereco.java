@@ -1,26 +1,19 @@
 package util;
 
+import java.io.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+public class ParIDEndereco implements RegistroHashExtensivel<ParIDEndereco> {
 
-public class ParIDEndereco implements util.RegistroHashExtensivel<ParIDEndereco> {
-    
-    private int id;   // chave
-    private long endereco;   // valor
-    private final short TAMANHO = 12; // tamanho em bytes
+    private int id;
+    private long endereco;
 
     public ParIDEndereco() {
-        this.id = -1;
-        this.endereco = -1;
+        this(-1, -1L);
     }
 
-    public ParIDEndereco(int id, long end) {
+    public ParIDEndereco(int id, long endereco) {
         this.id = id;
-        this.endereco = end;
+        this.endereco = endereco;
     }
 
     public int getId() {
@@ -31,27 +24,34 @@ public class ParIDEndereco implements util.RegistroHashExtensivel<ParIDEndereco>
         return endereco;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setEndereco(long endereco) {
+        this.endereco = endereco;
+    }
+
     @Override
     public int hashCode() {
-        return this.id;
+        return Math.abs(id);
     }
 
+    @Override
     public short size() {
-        return this.TAMANHO;
+        return (short) (Integer.BYTES + Long.BYTES); // 4 + 8 = 12 bytes
     }
 
-    public String toString() {
-        return "("+this.id + ";" + this.endereco+")";
-    }
-
+    @Override
     public byte[] toByteArray() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
-        dos.writeInt(this.id);
-        dos.writeLong(this.endereco);
+        dos.writeInt(id);
+        dos.writeLong(endereco);
         return baos.toByteArray();
     }
 
+    @Override
     public void fromByteArray(byte[] ba) throws IOException {
         ByteArrayInputStream bais = new ByteArrayInputStream(ba);
         DataInputStream dis = new DataInputStream(bais);
@@ -59,4 +59,8 @@ public class ParIDEndereco implements util.RegistroHashExtensivel<ParIDEndereco>
         this.endereco = dis.readLong();
     }
 
+    @Override
+    public String toString() {
+        return "(" + id + ", " + endereco + ")";
+    }
 }

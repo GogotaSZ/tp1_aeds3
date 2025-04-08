@@ -47,11 +47,12 @@ public class ParSerieEpisodio implements RegistroArvoreBMais<ParSerieEpisodio> {
     }
 
     @Override
-    public int compareTo(ParSerieEpisodio o) {
-        int c = Integer.compare(this.idSerie, o.idSerie);
-        if (c != 0) return c;
-        return Integer.compare(this.idEpisodio, o.idEpisodio);
+    public int compareTo(ParSerieEpisodio outro) {
+        if (this.idSerie != outro.idSerie)
+            return this.idSerie - outro.idSerie;
+        return this.idEpisodio - outro.idEpisodio;
     }
+
 
     @Override
     public ParSerieEpisodio clone() {
