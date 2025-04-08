@@ -1,6 +1,9 @@
+package visao;
+
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import modelo.Episodio;
 
 public class VisaoEpisodios {
 
