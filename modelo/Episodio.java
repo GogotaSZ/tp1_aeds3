@@ -3,10 +3,12 @@ package modelo;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import util.Registro;
+import util.RegistroHashExtensivel;
 
-public class Episodio implements Registro {
+public class Episodio implements RegistroHashExtensivel<Episodio>, Registro{
 
     private int id;
     private int idSerie;
@@ -96,6 +98,15 @@ public class Episodio implements Registro {
         duracao = dis.readInt();
         sinopse = dis.readUTF();
     }
+    @Override
+    public short size() {
+        try {
+            return (short) this.toByteArray().length;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
 
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -107,4 +118,9 @@ public class Episodio implements Registro {
                 "\nDuração........: " + duracao + " min" +
                 "\nSinopse........: " + sinopse;
     }
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome, temporada, duracao);
+    }
+
 }
