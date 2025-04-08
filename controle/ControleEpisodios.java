@@ -37,7 +37,9 @@ public class ControleEpisodios {
     public void menu() {
         int opc;
         do {
-            System.out.println("\n--- EPISÓDIOS DA SÉRIE ID: " + idSerie + " ---");
+            System.out.println("\nPUCFlix 1.0");
+            System.out.println("------------");
+            System.out.println("> Início > Séries > Série: "+ idSerie);
             System.out.println("1. Incluir episódio");
             System.out.println("2. Buscar episódio");
             System.out.println("3. Atualizar episódio");
