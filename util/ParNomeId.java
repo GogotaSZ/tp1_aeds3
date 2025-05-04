@@ -1,7 +1,5 @@
 package util;
 
-//PRECISAMOS CRIAR O ArquivoSerie.java
-
 /*
 Esta classe representa um objeto para uma entidade
 que será armazenado em uma árvore B+
