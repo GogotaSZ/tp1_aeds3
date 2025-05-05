@@ -124,3 +124,4 @@ public class Episodio implements RegistroHashExtensivel<Episodio>, Registro{
     }
 
 }
+
