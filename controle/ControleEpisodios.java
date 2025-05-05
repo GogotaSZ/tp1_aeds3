@@ -34,6 +34,10 @@ public class ControleEpisodios {
         }
     }
 
+    public ControleEpisodios() throws Exception {
+        this(4);  // Valor padrão razoável para a ordem da árvore
+    }
+
     public void menu() {
         int opc;
         do {
@@ -65,7 +69,7 @@ public class ControleEpisodios {
         } while (opc != 0);
     }
 
-    private void incluirEpisodio() throws Exception {
+    public void incluirEpisodio() throws Exception {
         Episodio ep = visaoE.leEpisodio(idSerie);
         if (ep == null) return;
 
@@ -74,7 +78,7 @@ public class ControleEpisodios {
         System.out.println("Episódio incluído com ID: " + id);
     }
 
-    private void buscarEpisodio() throws Exception {
+    public void buscarEpisodio() throws Exception {
         System.out.print("ID do episódio: ");
         int id = Integer.parseInt(sc.nextLine());
         Episodio ep = arqEpisodios.read(id);
@@ -85,7 +89,7 @@ public class ControleEpisodios {
         }
     }
 
-    private void atualizarEpisodio() throws Exception {
+    public void atualizarEpisodio() throws Exception {
         System.out.print("ID do episódio: ");
         int id = Integer.parseInt(sc.nextLine());
         Episodio antigo = arqEpisodios.read(id);
@@ -102,7 +106,7 @@ public class ControleEpisodios {
         System.out.println("Episódio atualizado.");
     }
 
-    private void excluirEpisodio() throws Exception {
+    public void excluirEpisodio() throws Exception {
         System.out.print("ID do episódio: ");
         int id = Integer.parseInt(sc.nextLine());
         Episodio ep = arqEpisodios.read(id);
@@ -116,7 +120,7 @@ public class ControleEpisodios {
         System.out.println("Episódio excluído.");
     }
 
-    private void listarEpisodios() throws Exception {
+    public void listarEpisodios() throws Exception {
         // Corrigido: leitura de todos os pares e filtragem por idSerie
         ArrayList<ParSerieEpisodio> todos = indiceArvore.readAll();
         ArrayList<ParSerieEpisodio> pares = new ArrayList<>();

@@ -172,4 +172,12 @@ public class Arquivo<T extends Registro> {
         arquivo.writeShort(tamanho);
         arquivo.writeLong(primeiro);
     }
+
+    public int incluir(T obj) throws Exception {
+        return create(obj);
+    }
+
+    public boolean excluir(int id) throws Exception {
+        return delete(id);
+    }
 }
