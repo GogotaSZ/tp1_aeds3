@@ -22,6 +22,11 @@ public class Ator implements Registro{
         this.nome = nome;
     }
 
+    public Ator(int id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
     public int getID() {
         return this.id;
     }
@@ -43,11 +48,20 @@ public class Ator implements Registro{
         return "ID: " + id + "\nNome: " + nome;
     }
 
+    @Override
+    public void setId(int i) {
+
+    }
+
+    @Override
+    public int getId() {
+        return 0;
+    }
+
     // Serialização para armazenamento em arquivo
     public byte[] toByteArray() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
-
         dos.writeInt(id);
         dos.writeUTF(nome);
 
