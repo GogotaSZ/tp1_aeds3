@@ -5,16 +5,16 @@ import controle.ControleSeries;
 import controle.ControleEpisodios;
 import controle.ControleAtores;
 
-public class VisaoAtor {
+public class MenuP {
     private Scanner scanner;
     private ControleSeries controleSeries;
     private ControleEpisodios controleEpisodios;
     private ControleAtores controleAtores;
 
-    public VisaoAtor() throws Exception {
+    public MenuP() throws Exception {
         scanner = new Scanner(System.in);
         controleSeries = new ControleSeries();
-        controleEpisodios = new ControleEpisodios();
+        //controleEpisodios = new ControleEpisodios();
         controleAtores = new ControleAtores();
     }
 
@@ -175,7 +175,7 @@ public class VisaoAtor {
             System.out.println("\nMENU ATORES");
             System.out.println("1) Listar atores");
             System.out.println("2) Cadastrar novo ator");
-            System.out.println("3) Buscar ator por ID");
+            System.out.println("3) Buscar ator por Nome");
             System.out.println("4) Atualizar ator");
             System.out.println("5) Excluir ator");
             System.out.println("0) Voltar");
@@ -192,7 +192,7 @@ public class VisaoAtor {
                     controleAtores.cadastrarAtor();
                     break;
                 case 3:
-                    controleAtores.buscarAtor();
+                    controleAtores.buscarAtorPorNome();
                     break;
                 case 4:
                     controleAtores.atualizarAtor();
@@ -208,13 +208,4 @@ public class VisaoAtor {
         } while (opcao != 0);
     }
 
-    public static void main(String[] args) {
-        try {
-            VisaoAtor menu = new VisaoAtor();
-            menu.menu();
-        } catch (Exception e) {
-            System.err.println("Erro no sistema: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 }
