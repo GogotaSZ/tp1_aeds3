@@ -99,6 +99,24 @@ public class ControleSeries {
         } while (opcao != 0);
     }
 
+    public void listarSeries() throws Exception {
+        System.out.println("\nLISTA DE SÉRIES:");
+        boolean encontrou = false;
+
+        // Percorre todos os IDs possíveis
+        for (int id = 1; id <= arqSeries.getUltimoID(); id++) {
+            Serie s = arqSeries.read(id);
+            if (s != null) {
+                System.out.println("ID: " + s.getId() + " | Nome: " + s.getNome());
+                encontrou = true;
+            }
+        }
+
+        if (!encontrou) {
+            System.out.println("Nenhuma série cadastrada.");
+        }
+    }
+
     public void inserirSerie() throws Exception {
         Serie nova = visaoS.leSerie(sc);
         int id = arqSeries.create(nova);

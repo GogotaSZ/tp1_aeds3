@@ -24,7 +24,7 @@ public class ControleAtores {
         do {
             System.out.println("\nMENU ATORES");
             System.out.println("1) Cadastrar novo ator");
-            System.out.println("2) Buscar ator por ID");
+            System.out.println("2) Buscar ator por nome");
             System.out.println("3) Listar todos os atores");
             System.out.println("4) Atualizar ator");
             System.out.println("5) Excluir ator");
@@ -40,7 +40,7 @@ public class ControleAtores {
                     cadastrarAtor();
                     break;
                 case 2:
-                    buscarAtor();
+                    buscarAtorPorNome();
                     break;
                 case 3:
                     listarAtores();
@@ -62,41 +62,56 @@ public class ControleAtores {
         } while (opcao != 0);
     }
 
-    // Métodos com validações
+    // Métodos auxiliares
+    private int getIdPorNome(String nome) throws Exception {
+        for (int id = 1; id <= arqAtor.getUltimoID(); id++) {
+            Ator a = arqAtor.read(id);
+            if (a != null && a.getNome().equalsIgnoreCase(nome)) {
+                return id;
+            }
+        }
+        return -1;
+    }
+
+    private Ator getAtorPorNome(String nome) throws Exception {
+        for (int id = 1; id <= arqAtor.getUltimoID(); id++) {
+            Ator a = arqAtor.read(id);
+            if (a != null && a.getNome().equalsIgnoreCase(nome)) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    // Métodos principais modificados
     public void cadastrarAtor() throws Exception {
         System.out.println("\nCADASTRAR ATOR");
 
-        System.out.print("ID do ator: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-
-        // Verifica se ID já existe
-        if (arqAtor.read(id) != null) {
-            System.out.println("Erro: ID já está em uso!");
-            return;
-        }
-
         System.out.print("Nome do ator: ");
-        String nome = scanner.nextLine();
+        String nome = scanner.nextLine().trim();
 
-        // Valida nome não vazio
-        if (nome.trim().isEmpty()) {
+        if (nome.isEmpty()) {
             System.out.println("Erro: Nome não pode ser vazio!");
             return;
         }
 
-        Ator novoAtor = new Ator(id, nome);
+        if (getAtorPorNome(nome) != null) {
+            System.out.println("Erro: Ator já cadastrado!");
+            return;
+        }
+
+        int novoId = arqAtor.getUltimoID() + 1;
+        Ator novoAtor = new Ator(novoId, nome);
         criar(novoAtor);
-        System.out.println("Ator cadastrado com sucesso!");
+        System.out.println("Ator cadastrado com sucesso! ID gerado: " + novoId);
     }
 
-    public void buscarAtor() throws Exception {
+    public void buscarAtorPorNome() throws Exception {
         System.out.println("\nBUSCAR ATOR");
-        System.out.print("Digite o ID do ator: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+        System.out.print("Digite o nome do ator: ");
+        String nome = scanner.nextLine();
 
-        Ator ator = ler(id);
+        Ator ator = getAtorPorNome(nome);
         if (ator == null) {
             System.out.println("Ator não encontrado!");
             return;
@@ -106,9 +121,8 @@ public class ControleAtores {
         System.out.println("ID: " + ator.getID());
         System.out.println("Nome: " + ator.getNome());
 
-        // Mostra séries vinculadas
         System.out.println("\nSÉRIES PARTICIPADAS:");
-        ArrayList<AtorSerie> series = arvoreAtorSerie.read(new AtorSerie(id, 0));
+        ArrayList<AtorSerie> series = arvoreAtorSerie.read(new AtorSerie(ator.getID(), 0));
         if (series.isEmpty()) {
             System.out.println("Nenhuma série vinculada");
         } else {
@@ -120,37 +134,41 @@ public class ControleAtores {
 
     public void listarAtores() throws Exception {
         System.out.println("\nLISTA DE ATORES:");
-        // Implemente conforme sua estrutura de arquivo
-        // Exemplo genérico:
-        for (int i = 1; i <= arqAtor.getUltimoID(); i++) {
-            Ator a = arqAtor.read(i);
+        boolean encontrou = false;
+        for (int id = 1; id <= arqAtor.getUltimoID(); id++) {
+            Ator a = arqAtor.read(id);
             if (a != null) {
-                System.out.println("ID: " + a.getID() + " | Nome: " + a.getNome());
+                System.out.println("Nome: " + a.getNome() + " | ID: " + a.getID());
+                encontrou = true;
             }
+        }
+        if (!encontrou) {
+            System.out.println("Nenhum ator cadastrado.");
         }
     }
 
     public void atualizarAtor() throws Exception {
         System.out.println("\nATUALIZAR ATOR");
-        System.out.print("Digite o ID do ator: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+        System.out.print("Digite o nome atual do ator: ");
+        String nomeAtual = scanner.nextLine();
 
-        Ator ator = ler(id);
+        Ator ator = getAtorPorNome(nomeAtual);
         if (ator == null) {
             System.out.println("Ator não encontrado!");
             return;
         }
 
-        System.out.println("Dados atuais:");
-        System.out.println("Nome: " + ator.getNome());
+        System.out.print("Novo nome (deixe em branco para manter): ");
+        String novoNome = scanner.nextLine().trim();
 
-        System.out.print("\nNovo nome (deixe em branco para manter): ");
-        String novoNome = scanner.nextLine();
+        if (!novoNome.isEmpty()) {
+            if (getAtorPorNome(novoNome) != null) {
+                System.out.println("Erro: Já existe um ator com este nome!");
+                return;
+            }
 
-        if (!novoNome.trim().isEmpty()) {
-            Ator atorAtualizado = new Ator(id, novoNome);
-            if (arqAtor.excluir(id) && criar(atorAtualizado) == id) {
+            Ator atorAtualizado = new Ator(ator.getID(), novoNome);
+            if (arqAtor.excluir(ator.getID()) && criar(atorAtualizado) == ator.getID()) {
                 System.out.println("Ator atualizado com sucesso!");
             } else {
                 System.out.println("Falha ao atualizar ator!");
@@ -162,23 +180,19 @@ public class ControleAtores {
 
     public void excluirAtor() throws Exception {
         System.out.println("\nEXCLUIR ATOR");
-        System.out.print("Digite o ID do ator: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+        System.out.print("Digite o nome do ator: ");
+        String nome = scanner.nextLine();
 
-        // Verifica se o ator existe
-        Ator ator = ler(id);
-        if (ator == null) {
+        int id = getIdPorNome(nome);
+        if (id == -1) {
             System.out.println("Ator não encontrado!");
             return;
         }
 
-        // Verifica se há vínculos com séries
         ArrayList<AtorSerie> vinculos = arvoreAtorSerie.read(new AtorSerie(id, 0));
         if (!vinculos.isEmpty()) {
             System.out.println("Erro: Ator não pode ser excluído pois está vinculado a " +
                     vinculos.size() + " série(s)!");
-            System.out.println("Remova os vínculos antes de excluir o ator.");
             return;
         }
 
@@ -189,53 +203,29 @@ public class ControleAtores {
         }
     }
 
-    private void listarSeriesDoAtor() throws Exception {
+    public void listarSeriesDoAtor() throws Exception {
         System.out.println("\nSÉRIES DO ATOR");
-        System.out.print("Digite o nome do ator (ou parte do nome): ");
-        String nomeBusca = scanner.nextLine().toLowerCase();
+        System.out.print("Digite o nome do ator: ");
+        String nome = scanner.nextLine();
 
-        // Lista todos os atores cujo nome contém o texto buscado
-        ArrayList<Ator> atoresEncontrados = new ArrayList<>();
-        for (int i = 1; i <= arqAtor.getUltimoID(); i++) {
-            Ator a = arqAtor.read(i);
-            if (a != null && a.getNome().toLowerCase().contains(nomeBusca)) {
-                atoresEncontrados.add(a);
+        Ator ator = getAtorPorNome(nome);
+        if (ator == null) {
+            System.out.println("Ator não encontrado!");
+            return;
+        }
+
+        System.out.println("\nSéries vinculadas ao ator: " + ator.getNome());
+        ArrayList<AtorSerie> series = arvoreAtorSerie.read(new AtorSerie(ator.getID(), 0));
+        if (series.isEmpty()) {
+            System.out.println("Nenhuma série vinculada");
+        } else {
+            for (AtorSerie as : series) {
+                System.out.println("- Série ID: " + as.getIdSerie());
             }
         }
-
-        if (atoresEncontrados.isEmpty()) {
-            System.out.println("Nenhum ator encontrado com esse nome!");
-            return;
-        }
-
-        // Se encontrou apenas um, mostra diretamente
-        if (atoresEncontrados.size() == 1) {
-            Ator ator = atoresEncontrados.get(0);
-            System.out.println("\nSéries vinculadas ao ator: " + ator.getNome());
-            listarSeriesPorAtor(ator.getID());
-            return;
-        }
-
-        // Se encontrou vários, mostra lista para seleção
-        System.out.println("\nForam encontrados " + atoresEncontrados.size() + " atores:");
-        for (int i = 0; i < atoresEncontrados.size(); i++) {
-            System.out.println((i+1) + ") " + atoresEncontrados.get(i).getNome());
-        }
-
-        System.out.print("\nSelecione o número do ator desejado: ");
-        int selecao = scanner.nextInt();
-        scanner.nextLine();
-
-        if (selecao < 1 || selecao > atoresEncontrados.size()) {
-            System.out.println("Seleção inválida!");
-            return;
-        }
-
-        Ator atorSelecionado = atoresEncontrados.get(selecao-1);
-        System.out.println("\nSéries vinculadas ao ator: " + atorSelecionado.getNome());
-        listarSeriesPorAtor(atorSelecionado.getID());
     }
 
+    // Métodos CRUD mantidos (agora usando IDs internamente)
     public int criar(Ator ator) throws Exception {
         return arqAtor.incluir(ator);
     }
@@ -244,61 +234,11 @@ public class ControleAtores {
         return arqAtor.read(id);
     }
 
-    public boolean atualizarVinculosAtor(int idAtor, int[] novosIdsSeries) throws Exception {
-        // 1. Primeiro, remove todos os vínculos existentes do ator
-        ArrayList<AtorSerie> vinculosAntigos = arvoreAtorSerie.read(new AtorSerie(idAtor, 0));
-
-        for (AtorSerie vinculo : vinculosAntigos) {
-            int idSerie = vinculo.getIdSerie();
-            arvoreSerieAtor.delete(new SerieAtor(idSerie, idAtor));
-            arvoreAtorSerie.delete(vinculo);
-        }
-
-        // 2. Agora cria os novos vínculos
-        for (int idSerie : novosIdsSeries) {
-            arvoreAtorSerie.create(new AtorSerie(idAtor, idSerie));
-            arvoreSerieAtor.create(new SerieAtor(idSerie, idAtor));
-        }
-
-        return true;
-    }
-
-    public boolean atualizarVinculosSerie(int idSerie, int[] novosIdsAtores) throws Exception {
-        // 1. Primeiro, remove todos os vínculos existentes da série
-        ArrayList<SerieAtor> vinculosAntigos = arvoreSerieAtor.read(new SerieAtor(idSerie, 0));
-
-        for (SerieAtor vinculo : vinculosAntigos) {
-            int idAtor = vinculo.getIdAtor();
-            arvoreAtorSerie.delete(new AtorSerie(idAtor, idSerie));
-            arvoreSerieAtor.delete(vinculo);
-        }
-
-        // 2. Agora cria os novos vínculos
-        for (int idAtor : novosIdsAtores) {
-            arvoreSerieAtor.create(new SerieAtor(idSerie, idAtor));
-            arvoreAtorSerie.create(new AtorSerie(idAtor, idSerie));
-        }
-
-        return true;
-    }
-
     public boolean deletar(int id) throws Exception {
-        // Remove os vínculos antes de deletar o ator
-        ArrayList<AtorSerie> vinculos = arvoreAtorSerie.read(new AtorSerie(id, 0));
-
-        for (AtorSerie vinculo : vinculos) {
-            int idSerie = vinculo.getIdSerie();
-            arvoreSerieAtor.delete(new SerieAtor(idSerie, id));
-        }
-
-        // Remove todos os vínculos do ator
-        for (AtorSerie vinculo : vinculos) {
-            arvoreAtorSerie.delete(vinculo);
-        }
-
         return arqAtor.excluir(id);
     }
 
+    // Métodos de vinculação (mantidos com IDs internos)
     public void vincularAtorSerie(int idAtor, int idSerie) throws Exception {
         arvoreAtorSerie.create(new AtorSerie(idAtor, idSerie));
         arvoreSerieAtor.create(new SerieAtor(idSerie, idAtor));
@@ -309,19 +249,4 @@ public class ControleAtores {
         arvoreSerieAtor.delete(new SerieAtor(idSerie, idAtor));
     }
 
-    public void listarSeriesPorAtor(int idAtor) throws Exception {
-        ArrayList<AtorSerie> vinculos = arvoreAtorSerie.read(new AtorSerie(idAtor, 0));
-
-        for (AtorSerie vinculo : vinculos) {
-            System.out.println("ID da série vinculada: " + vinculo.getIdSerie());
-        }
-    }
-
-    public void listarAtoresPorSerie(int idSerie) throws Exception {
-        ArrayList<SerieAtor> vinculos = arvoreSerieAtor.read(new SerieAtor(idSerie, 0));
-
-        for (SerieAtor vinculo : vinculos) {
-            System.out.println("ID do ator vinculado: " + vinculo.getIdAtor());
-        }
-    }
 }
