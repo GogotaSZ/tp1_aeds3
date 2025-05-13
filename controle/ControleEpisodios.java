@@ -35,10 +35,33 @@ public class ControleEpisodios {
     }
 
     public ControleEpisodios() throws Exception {
-        this(4);  // Valor padrão razoável para a ordem da árvore
+        arqEpisodios = new Arquivo<>("Episodios", Episodio.class.getConstructor());
+        arqSeries = new Arquivo<>("Series", Serie.class.getConstructor());
+        indiceArvore = new ArvoreBMais<>(
+                ParSerieEpisodio.class.getConstructor(),
+                4,
+                "dados/Episodios/serie_episodio.ind"
+        );
+        visaoE = new VisaoEpisodios();
+        sc = new Scanner(System.in);
     }
 
+
     public void menu() {
+        try {
+            System.out.print("Informe o ID da série para gerenciar episódios: ");
+            idSerie = Integer.parseInt(sc.nextLine());
+
+            Serie s = arqSeries.read(idSerie);
+            if (s == null) {
+                System.out.println("❌ Série não encontrada. Não é possível gerenciar episódios.");
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao tentar acessar a série.");
+            return;
+        }
+
         int opc;
         do {
             System.out.println("\nPUCFlix 1.0");
@@ -68,6 +91,7 @@ public class ControleEpisodios {
 
         } while (opc != 0);
     }
+
 
     public void incluirEpisodio() throws Exception {
         Episodio ep = visaoE.leEpisodio(idSerie);

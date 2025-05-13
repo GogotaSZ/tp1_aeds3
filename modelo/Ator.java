@@ -49,8 +49,8 @@ public class Ator implements Registro{
     }
 
     @Override
-    public void setId(int i) {
-
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -58,23 +58,24 @@ public class Ator implements Registro{
         return 0;
     }
 
-    // Serialização para armazenamento em arquivo
+    @Override
     public byte[] toByteArray() throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(baos);
-        dos.writeInt(id);
-        dos.writeUTF(nome);
+        ByteArrayOutputStream ba = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(ba);
 
-        return baos.toByteArray();
+        dos.writeInt(id);           // Salva o ID!
+        dos.writeUTF(nome);         // Salva o nome
+
+        return ba.toByteArray();
     }
 
-    // Desserialização para reconstruir objeto a partir de bytes
+    @Override
     public void fromByteArray(byte[] ba) throws IOException {
-        ByteArrayInputStream bais = new ByteArrayInputStream(ba);
-        DataInputStream dis = new DataInputStream(bais);
+        ByteArrayInputStream bb = new ByteArrayInputStream(ba);
+        DataInputStream dis = new DataInputStream(bb);
 
-        id = dis.readInt();
-        nome = dis.readUTF();
+        id = dis.readInt();         // Recupera o ID!
+        nome = dis.readUTF();       // Recupera o nome
     }
-    
+
 }
